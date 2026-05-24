@@ -29,10 +29,11 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Enable Row Level Security (RLS) or permit direct operations for demo purposes
+-- Enable Row Level Security (RLS) and grant explicit public access
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow public read access" ON public.profiles FOR SELECT USING (true);
-CREATE POLICY "Allow individual insert/update" ON public.profiles FOR ALL USING (true);
+CREATE POLICY "Allow public select" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON public.profiles FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update" ON public.profiles FOR UPDATE USING (true) WITH CHECK (true);
 
 
 -- 2. POSTS TABLE
@@ -48,8 +49,9 @@ CREATE TABLE IF NOT EXISTS public.posts (
 );
 
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow public read access" ON public.posts FOR SELECT USING (true);
-CREATE POLICY "Allow insert/modify for authenticated users" ON public.posts FOR ALL USING (true);
+CREATE POLICY "Allow public select" ON public.posts FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON public.posts FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update" ON public.posts FOR UPDATE USING (true) WITH CHECK (true);
 
 
 -- 3. CONNECTIONS TABLE
@@ -63,8 +65,9 @@ CREATE TABLE IF NOT EXISTS public.connections (
 );
 
 ALTER TABLE public.connections ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow read access to connections" ON public.connections FOR SELECT USING (true);
-CREATE POLICY "Allow manage connections" ON public.connections FOR ALL USING (true);
+CREATE POLICY "Allow public select" ON public.connections FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON public.connections FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update" ON public.connections FOR UPDATE USING (true) WITH CHECK (true);
 
 
 -- 4. RSVPS TABLE
@@ -80,8 +83,9 @@ CREATE TABLE IF NOT EXISTS public.rsvps (
 );
 
 ALTER TABLE public.rsvps ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow read access to RSVPs" ON public.rsvps FOR SELECT USING (true);
-CREATE POLICY "Allow insert/manage RSVPs" ON public.rsvps FOR ALL USING (true);
+CREATE POLICY "Allow public select" ON public.rsvps FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON public.rsvps FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update" ON public.rsvps FOR UPDATE USING (true) WITH CHECK (true);
 ```
 
 ---
