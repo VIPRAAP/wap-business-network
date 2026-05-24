@@ -181,9 +181,12 @@ function saveSettings() {
   if (res.success) {
     showToast(res.message, "success");
     toggleSettingsModal(false);
-    setTimeout(() => {
-      window.location.reload(); // Reload to initialize client on all components
-    }, 1200);
+    // Reload only if not on the auth page to preserve form field inputs!
+    if (!window.location.pathname.endsWith('auth.html')) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    }
   } else {
     showToast(res.message, "error");
   }
