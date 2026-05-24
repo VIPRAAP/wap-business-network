@@ -12,10 +12,15 @@ class DatabaseService {
     this.seedMockDatabase();
   }
 
-  // 1. Initialize Supabase if keys exist in localStorage
   initSupabase() {
-    const url = localStorage.getItem('wap_supabase_url');
-    const key = localStorage.getItem('wap_supabase_key');
+    let url = localStorage.getItem('wap_supabase_url');
+    let key = localStorage.getItem('wap_supabase_key');
+
+    // Default to your live Supabase credentials if no local override is configured in browser
+    if (!url || !key) {
+      url = "https://bfyvcdfzjsojjkgcirpx.supabase.co";
+      key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmeXZjZGZ6anNvamprZ2NpcnB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MzUyODYsImV4cCI6MjA5NTIxMTI4Nn0.2hcYSA8xm3YI5e0ValM36LSgNdpduWCCVUMSknOnbVM";
+    }
 
     if (url && key) {
       try {
