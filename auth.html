@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Access – WAP We Are Professionals</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <!-- Core Theme & Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Supabase & jQuery CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-logo">WAP</div>
+    <div class="spinner-gold"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:16px;">Verifying Connection...</p>
+  </div>
+
+  <!-- AUTH PAGE WRAPPER -->
+  <div id="authPage">
+    <div class="auth-container">
+      <div class="auth-box">
+        <div class="auth-header">
+          <a href="index.html" style="text-decoration:none;">
+            <div class="brand-logo mx-auto mb-3" style="width:48px; height:48px; font-size:18px;">WAP</div>
+          </a>
+          <h2 id="authHeading">Join WAP Network</h2>
+          <p id="authSubheading">India's Premier Business Circle Since 2019</p>
+
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="tabRegister" onclick="switchAuthMode('register')">Sign Up</button>
+            <button class="auth-tab" id="tabLogin" onclick="switchAuthMode('login')">Sign In</button>
+          </div>
+        </div>
+
+        <div class="auth-body">
+          
+          <!-- ============================
+               SIGN IN FORM
+          ============================ -->
+          <div id="loginForm" style="display:none;">
+            <div class="mb-3">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="loginEmail" placeholder="name@company.com" required/>
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required/>
+            </div>
+            <button class="btn-auth" onclick="handleLogin()">Sign In to Dashboard</button>
+          </div>
+
+          <!-- ============================
+               SIGN UP FORM (MULTI-STEP)
+          ============================ -->
+          <div id="registerForm">
+            <!-- Step Indicators -->
+            <div class="progress-steps">
+              <div class="prog-step active" id="pStep1"></div>
+              <div class="prog-step" id="pStep2"></div>
+              <div class="prog-step" id="pStep3"></div>
+            </div>
+
+            <!-- STEP 1: CREDENTIALS -->
+            <div class="auth-step active" id="regStep1">
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="regName" placeholder="e.g. Rahul Mehta" required/>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="regEmail" placeholder="name@company.com" required/>
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="regPassword" placeholder="Minimum 6 characters" required/>
+              </div>
+              <button class="btn-auth" onclick="nextRegStep(2)">Continue to Business Profile <i class="bi bi-arrow-right-short"></i></button>
+            </div>
+
+            <!-- STEP 2: PROFESSIONAL DETAIL -->
+            <div class="auth-step" id="regStep2">
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Company Name</label>
+                  <input type="text" class="form-control" id="regCompany" placeholder="e.g. TechNova Ltd" required/>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Designation</label>
+                  <input type="text" class="form-control" id="regDesignation" placeholder="e.g. Director / Owner" required/>
+                </div>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Business Industry</label>
+                  <select class="form-select" id="regDomain" required>
+                    <option value="" disabled selected>Select Industry</option>
+                    <option value="SaaS & Tech">SaaS & Tech</option>
+                    <option value="Business Consulting">Business Consulting</option>
+                    <option value="Creative Arts & Branding">Creative Arts & Branding</option>
+                    <option value="Supply Chain & Logistics">Supply Chain & Logistics</option>
+                    <option value="Legal Services">Legal Services</option>
+                    <option value="Financial Services">Financial & Tax Services</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Retail & Trade">Retail & Trade</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Years of Experience</label>
+                  <input type="text" class="form-control" id="regExperience" placeholder="e.g. 8+ Years" required/>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Mobile Number</label>
+                <input type="tel" class="form-control" id="regMobile" placeholder="10-digit mobile" required/>
+              </div>
+              <div class="row g-2 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">City</label>
+                  <input type="text" class="form-control" id="regCity" placeholder="e.g. Mumbai" required/>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Business Website</label>
+                  <input type="url" class="form-control" id="regWebsite" placeholder="https://..." />
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn-auth bg-secondary" style="width:100px;" onclick="prevRegStep(1)"><i class="bi bi-arrow-left-short"></i> Back</button>
+                <button class="btn-auth" style="flex:1;" onclick="nextRegStep(3)">Continue to Membership Checkout</button>
+              </div>
+            </div>
+
+            <!-- STEP 3: MOCK CHECKOUT PAYMENT -->
+            <div class="auth-step" id="regStep3">
+              <div class="qr-card">
+                <div class="plan-badge text-gold fw-700 mb-2" id="checkoutPlanBadge">Selected Plan: Essential</div>
+                <div class="h3 fw-700 text-navy mb-3" id="checkoutPriceText">₹501 lifetime</div>
+                <div class="qr-image">
+                  <!-- Embed a clean mock pay QR pattern -->
+                  <i class="bi bi-qr-code" style="font-size: 110px; color: var(--navy);"></i>
+                </div>
+                <p class="mb-2" style="font-size:12px;color:var(--text-mid);">Scan the QR code above or pay via UPI ID:</p>
+                <div class="upi-string">diipaal@okhdfcbank</div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">UPI Transaction Reference ID (12-digit UTR)</label>
+                <input type="text" class="form-control" id="regUtr" placeholder="Enter UTR transaction ID" required maxlength="12"/>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button class="btn-auth bg-secondary" style="width:100px;" onclick="prevRegStep(2)"><i class="bi bi-arrow-left-short"></i> Back</button>
+                <button class="btn-auth" style="flex:1;" onclick="handleRegistration()">Verify Payment & Register</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DB & Navigation Engine Scripts -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Page Logic -->
+  <script>
+    let selectedPlan = 'essential';
+    let selectedPrice = 501;
+
+    // Detect plan queries
+    $(document).ready(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode') || 'register';
+      const plan = urlParams.get('plan');
+      const price = urlParams.get('price');
+
+      if (plan && price) {
+        selectedPlan = plan;
+        selectedPrice = parseInt(price);
+        
+        let planTitle = 'Essential Plan';
+        if(plan === 'professional') planTitle = 'Professional Plan';
+        if(plan === 'premium-semi') planTitle = 'Premium Semi-Annual';
+        if(plan === 'premium-annual') planTitle = 'Premium Annual';
+
+        $('#checkoutPlanBadge').text(`Selected Plan: ${planTitle}`);
+        $('#checkoutPriceText').text(`₹${price} ${plan.includes('premium') ? 'subscription' : 'lifetime'}`);
+      }
+
+      switchAuthMode(mode);
+    });
+
+    function switchAuthMode(mode) {
+      if (mode === 'login') {
+        $('#tabRegister').removeClass('active');
+        $('#tabLogin').addClass('active');
+        $('#registerForm').hide();
+        $('#loginForm').show();
+        $('#authHeading').text("Welcome Back");
+        $('#authSubheading').text("Sign in to connect with WAP Professionals");
+      } else {
+        $('#tabLogin').removeClass('active');
+        $('#tabRegister').addClass('active');
+        $('#loginForm').hide();
+        $('#registerForm').show();
+        $('#authHeading').text("Join WAP Network");
+        $('#authSubheading').text("India's Premier Business Circle Since 2019");
+      }
+    }
+
+    // Step navigation
+    function nextRegStep(step) {
+      if (step === 2) {
+        // Validate step 1 fields
+        if (!$('#regName').val() || !$('#regEmail').val() || !$('#regPassword').val()) {
+          showToast("Please fill out all credentials to continue.", "error");
+          return;
+        }
+        if ($('#regPassword').val().length < 6) {
+          showToast("Password must be at least 6 characters.", "error");
+          return;
+        }
+        
+        $('#pStep1').addClass('done');
+        $('#pStep2').addClass('active');
+        $('#regStep1').removeClass('active');
+        $('#regStep2').addClass('active');
+      } 
+      else if (step === 3) {
+        // Validate step 2 fields
+        if (!$('#regCompany').val() || !$('#regDesignation').val() || !$('#regDomain').val() || !$('#regExperience').val() || !$('#regMobile').val() || !$('#regCity').val()) {
+          showToast("Please fill out all required profile details.", "error");
+          return;
+        }
+
+        $('#pStep2').addClass('done');
+        $('#pStep3').addClass('active');
+        $('#regStep2').removeClass('active');
+        $('#regStep3').addClass('active');
+      }
+    }
+
+    function prevRegStep(step) {
+      if (step === 1) {
+        $('#pStep2').removeClass('active');
+        $('#pStep1').removeClass('done');
+        $('#regStep2').removeClass('active');
+        $('#regStep1').addClass('active');
+      } else if (step === 2) {
+        $('#pStep3').removeClass('active');
+        $('#pStep2').removeClass('done');
+        $('#regStep3').removeClass('active');
+        $('#regStep2').addClass('active');
+      }
+    }
+
+    // Login Handler
+    async function handleLogin() {
+      const email = $('#loginEmail').val().trim();
+      const pass = $('#loginPassword').val();
+
+      if (!email || !pass) {
+        showToast("Please enter email and password.", "error");
+        return;
+      }
+
+      showPageLoader();
+      const res = await window.WapDB.loginUser(email, pass);
+      hidePageLoader();
+
+      if (res.success) {
+        localStorage.setItem('wap_session_user', JSON.stringify(res.user));
+        showToast(`Welcome back, ${res.user.full_name}! Redirecting...`, "success");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1200);
+      } else {
+        showToast(res.message, "error");
+      }
+    }
+
+    // Registration Handler
+    async function handleRegistration() {
+      const utr = $('#regUtr').val().trim();
+      if (!utr || utr.length !== 12 || isNaN(utr)) {
+        showToast("Please enter a valid 12-digit numeric UPI UTR reference number.", "error");
+        return;
+      }
+
+      const userId = 'usr_' + Date.now();
+      const user = {
+        id: userId,
+        email: $('#regEmail').val().trim(),
+        full_name: $('#regName').val().trim(),
+        company: $('#regCompany').val().trim(),
+        domain: $('#regDomain').val(),
+        designation: $('#regDesignation').val().trim(),
+        experience: $('#regExperience').val().trim(),
+        mobile: $('#regMobile').val().trim(),
+        city: $('#regCity').val().trim(),
+        website: $('#regWebsite').val().trim(),
+        avatar_url: ""
+      };
+
+      showPageLoader();
+      
+      // 1. Register User in Supabase/Local Database
+      const res = await window.WapDB.registerUser(user);
+      
+      // 2. Log RSVP payment transaction
+      const rsvp = {
+        id: 'pay_' + Date.now(),
+        user_id: userId,
+        user_name: user.full_name,
+        event_id: 'plan_' + selectedPlan,
+        amount: selectedPrice,
+        utr_number: utr,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      };
+      await window.WapDB.createRsvp(rsvp);
+
+      hidePageLoader();
+
+      if (res.success) {
+        // Set user session
+        localStorage.setItem('wap_session_user', JSON.stringify(res.user));
+        showToast("Payment verified! Account registered successfully.", "success");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+      } else {
+        showToast(res.message, "error");
+      }
+    }
+  </script>
+</body>
+</html>

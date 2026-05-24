@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events & RSVP – WAP We Are Professionals</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <!-- Core Theme & Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Supabase & jQuery CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- SECURITY ROUTE REDIRECT -->
+  <script>
+    if (!localStorage.getItem('wap_session_user')) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-logo">WAP</div>
+    <div class="spinner-gold"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:16px;">Loading Events Hub...</p>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <div class="dashboard-container">
+    <div class="container">
+      
+      <div class="row g-4">
+        <!-- ============================
+             LEFT COLUMN: MEETING DETAILS & FLYER
+        ============================ -->
+        <div class="col-lg-8">
+          <div class="event-card">
+            <div class="event-card-banner">
+              <div class="event-num">86</div>
+              <div>
+                <div class="event-card-sub">WAP Weekly Meeting</div>
+                <h3 class="event-card-title">86th Business Networking Meeting</h3>
+              </div>
+            </div>
+            
+            <div class="event-card-body">
+              <!-- Grid details -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <div class="event-detail-row">
+                    <i class="bi bi-calendar-check-fill"></i>
+                    <div>
+                      <strong class="text-navy d-block">Date & Day</strong>
+                      <span>Friday, March 27, 2024</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="event-detail-row">
+                    <i class="bi bi-clock-fill"></i>
+                    <div>
+                      <strong class="text-navy d-block">Meeting Timings</strong>
+                      <span>4:00 PM – 6:00 PM (IST)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="event-detail-row">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <div>
+                      <strong class="text-navy d-block">Venue Address</strong>
+                      <span>GOLDEN DELICACY, MALAD WEST, MUMBAI</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="event-detail-row">
+                    <i class="bi bi-cash-coin"></i>
+                    <div>
+                      <strong class="text-navy d-block">Meeting Charges</strong>
+                      <span>₹651.00 per person (Inclusive of tea/snacks)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Flyer content text -->
+              <div class="alert alert-warning" style="background: rgba(201,168,76,0.08); border-left: 4px solid var(--gold); border-top:none; border-right:none; border-bottom:none;">
+                <h6 class="fw-700 text-navy mb-2" style="font-family:'Playfair Display',serif;"><i class="bi bi-quote"></i> Enhance Your Business Networth</h6>
+                <p class="mb-0 text-mid" style="font-size: 13px; line-height: 1.6;">Your presence is requested at this highly curated networking meetup to unlock referrals, seek strategic partnerships, and pitch directly to 40+ active business owners in Mumbai West circles.</p>
+              </div>
+
+              <div class="event-tags">
+                <span class="event-tag"><i class="bi bi-tag-fill me-1"></i> #MaladMeetup</span>
+                <span class="event-tag"><i class="bi bi-tag-fill me-1"></i> #BusinessReferrals</span>
+                <span class="event-tag"><i class="bi bi-tag-fill me-1"></i> #Since2019</span>
+              </div>
+
+              <!-- Interactive RSVP control button -->
+              <div id="rsvpActionButtonContainer">
+                <button class="btn-register-event" onclick="openPaymentDrawer()">
+                  <i class="bi bi-send-check-fill"></i> Register for 86th Meeting (₹651)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================
+             RIGHT COLUMN: MY REGISTRATION STATUS & HELP
+        ============================ -->
+        <div class="col-lg-4">
+          <!-- Registration status widget -->
+          <div class="mini-card">
+            <h6>My RSVP Status</h6>
+            <div id="myRsvpStatusContainer">
+              <!-- Rendered via JS -->
+              <div class="text-center py-3 text-muted" style="font-size:13px;">
+                <i class="bi bi-info-circle" style="font-size: 20px;"></i>
+                <p class="mt-2 mb-0">You have not registered for this meeting yet. Click register to proceed with payment.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Meeting Guidelines -->
+          <div class="mini-card">
+            <h6>Meeting Protocol</h6>
+            <ul class="plan-features p-0 mb-0">
+              <li style="font-size: 12px; margin-bottom: 10px;"><i class="bi bi-check2 text-gold"></i> Formal business attire is highly recommended.</li>
+              <li style="font-size: 12px; margin-bottom: 10px;"><i class="bi bi-check2 text-gold"></i> Carry at least 40+ business visiting cards.</li>
+              <li style="font-size: 12px; margin-bottom: 10px;"><i class="bi bi-check2 text-gold"></i> Be seated at least 15 minutes before 4:00 PM.</li>
+              <li style="font-size: 12px; margin-bottom: 0;"><i class="bi bi-check2 text-gold"></i> 1-minute elevator pitch is permitted for all registered members.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================
+       UPI PAYMENT CHECKOUT DRAWER
+  ============================ -->
+  <div class="payment-drawer" id="paymentDrawer">
+    <div class="payment-header">
+      <div>
+        <h6 class="fw-700 mb-0 text-white"><i class="bi bi-wallet2 text-gold"></i> UPI Payment Gateway</h6>
+        <small style="color:rgba(255,255,255,0.6)">WAP Business Networks</small>
+      </div>
+      <button class="btn-close-custom text-white" onclick="closePaymentDrawer()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    
+    <div class="payment-body">
+      <div class="qr-card">
+        <div class="text-gold fw-700 mb-1" style="font-size: 12px; letter-spacing:1px; text-transform: uppercase;">86th Meeting Fee</div>
+        <div class="h2 fw-700 text-navy mb-3">₹651.00</div>
+        
+        <div class="qr-image">
+          <!-- Pay QR glyph -->
+          <i class="bi bi-qr-code-scan" style="font-size: 110px; color: var(--navy);"></i>
+        </div>
+        
+        <p class="mb-2 text-mid" style="font-size: 12px;">Scan QR code using GPay, PhonePe, Paytm, or BHIM</p>
+        <div class="upi-string">diipaal@okhdfcbank</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">12-Digit UPI Transaction Reference (UTR / Txn ID)</label>
+        <input type="text" class="form-control" id="paymentUtr" placeholder="Enter numeric transaction ID" maxlength="12" required/>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">Look for Ref No. or UTR in your payment success screen.</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Upload Payment Screenshot (Optional)</label>
+        <input type="file" class="form-control" id="paymentScreenshot" accept="image/*"/>
+      </div>
+
+      <button class="btn-price-cta btn-price-cta-gold py-3" onclick="submitRsvpPayment()">
+        <i class="bi bi-shield-lock-fill"></i> Confirm & Submit Payment
+      </button>
+    </div>
+  </div>
+
+  <!-- DB & Navigation Engine Scripts -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Page Logic -->
+  <script>
+    let currentUser = null;
+
+    $(document).ready(async () => {
+      currentUser = JSON.parse(localStorage.getItem('wap_session_user'));
+      await refreshRsvpStatus();
+    });
+
+    async function refreshRsvpStatus() {
+      const rsvps = await window.WapDB.getRsvps(currentUser.id);
+      
+      // Filter for the 86th meeting RSVP
+      const meetRsvp = rsvps.find(r => r.event_id === 'evt_86');
+      
+      const statusContainer = $('#myRsvpStatusContainer');
+      const actionContainer = $('#rsvpActionButtonContainer');
+
+      if (meetRsvp) {
+        let badgeColor = '#C9A84C'; // Pending Gold
+        let badgeIcon = 'bi-clock-history';
+        let statusTitle = 'Pending Verification';
+        let statusDesc = 'We are matching your UTR transaction ID. Your access pass will be issued shortly.';
+
+        if (meetRsvp.status === 'verified') {
+          badgeColor = '#28a745'; // Verified Green
+          badgeIcon = 'bi-patch-check-fill';
+          statusTitle = 'RSVP Confirmed';
+          statusDesc = 'Your entry pass has been issued! We look forward to seeing you at Golden Delicacy, Malad this Friday.';
+        }
+
+        statusContainer.html(`
+          <div class="text-center py-3">
+            <i class="bi ${badgeIcon}" style="font-size: 32px; color: ${badgeColor};"></i>
+            <h6 class="fw-700 text-navy mt-2">${statusTitle}</h6>
+            <p class="text-mid" style="font-size: 13px; line-height: 1.6;">${statusDesc}</p>
+            <div style="background:#F0F4F8; padding:8px 12px; border-radius:8px; font-family:'DM Mono', monospace; font-size:12px; display:inline-block;">
+              UTR: ${meetRsvp.utr_number}
+            </div>
+          </div>
+        `);
+
+        // If registered, show already registered on main button
+        actionContainer.html(`
+          <button class="btn-register-event bg-secondary" disabled style="cursor:not-allowed;">
+            <i class="bi bi-calendar-check-fill"></i> RSVP Submitted (UTR: ${meetRsvp.utr_number})
+          </button>
+        `);
+      } else {
+        // Reset to default
+        statusContainer.html(`
+          <div class="text-center py-3 text-muted" style="font-size:13px;">
+            <i class="bi bi-info-circle" style="font-size: 20px;"></i>
+            <p class="mt-2 mb-0">You have not registered for this meeting yet. Click register to proceed with payment.</p>
+          </div>
+        `);
+
+        actionContainer.html(`
+          <button class="btn-register-event" onclick="openPaymentDrawer()">
+            <i class="bi bi-send-check-fill"></i> Register for 86th Meeting (₹651)
+          </button>
+        `);
+      }
+    }
+
+    // Payment Drawer controllers
+    function openPaymentDrawer() {
+      $('#paymentUtr').val('');
+      $('#paymentScreenshot').val('');
+      $('#paymentDrawer').addClass('open');
+    }
+
+    function closePaymentDrawer() {
+      $('#paymentDrawer').removeClass('open');
+    }
+
+    async function submitRsvpPayment() {
+      const utr = $('#paymentUtr').val().trim();
+      if (!utr || utr.length !== 12 || isNaN(utr)) {
+        showToast("Please enter a valid 12-digit numeric UTR reference number.", "error");
+        return;
+      }
+
+      const rsvp = {
+        id: 'rsvp_' + Date.now(),
+        user_id: currentUser.id,
+        user_name: currentUser.full_name,
+        event_id: 'evt_86',
+        amount: 651,
+        utr_number: utr,
+        status: 'pending',
+        created_at: new Date().toISOString()
+      };
+
+      showPageLoader();
+      const res = await window.WapDB.createRsvp(rsvp);
+      hidePageLoader();
+
+      if (res.success) {
+        showToast("RSVP Payment submitted successfully!", "success");
+        closePaymentDrawer();
+        await refreshRsvpStatus();
+      } else {
+        showToast(res.message, "error");
+      }
+    }
+  </script>
+</body>
+</html>

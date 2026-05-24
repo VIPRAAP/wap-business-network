@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Members Directory – WAP We Are Professionals</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <!-- Core Theme & Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Supabase & jQuery CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- SECURITY ROUTE REDIRECT -->
+  <script>
+    if (!localStorage.getItem('wap_session_user')) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-logo">WAP</div>
+    <div class="spinner-gold"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:16px;">Loading Members Directory...</p>
+  </div>
+
+  <!-- DIRECTORY CONTAINER -->
+  <div class="dashboard-container">
+    <div class="container">
+      
+      <!-- Live Search Header Panel -->
+      <div class="members-search-bar">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-4">
+            <h4 class="fw-700 text-navy mb-1" style="font-family:'Playfair Display',serif;">WAP Member Directory</h4>
+            <p class="text-mid mb-0" style="font-size:13px;">Find and connect with trusted leaders across 12+ industries</p>
+          </div>
+          <div class="col-lg-8">
+            <div class="search-wrapper">
+              <i class="bi bi-search search-icon"></i>
+              <input type="text" class="search-input" id="searchInput" placeholder="Search by name, company, business industry or city..." onkeyup="handleLiveSearch()"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Members Grid Container -->
+      <div class="row g-4" id="membersGridContainer">
+        <!-- Loader Skeleton -->
+        <div class="col-md-6 col-lg-3">
+          <div class="member-grid-card skeleton-card">
+            <div class="skeleton mx-auto mb-3" style="width:72px; height:72px; border-radius:50%;"></div>
+            <div class="skeleton mb-2 mx-auto" style="width:120px; height:18px;"></div>
+            <div class="skeleton mb-3 mx-auto" style="width:80px; height:12px;"></div>
+            <div class="skeleton mb-3 mx-auto" style="width:90px; height:20px; border-radius:20px;"></div>
+            <div class="skeleton mx-auto" style="width:100%; height:36px; border-radius:50px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DB & Navigation Engine Scripts -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Directory Page Logic -->
+  <script>
+    let allMembers = [];
+    let currentUser = null;
+
+    $(document).ready(async () => {
+      currentUser = JSON.parse(localStorage.getItem('wap_session_user'));
+      await loadMembers();
+    });
+
+    async function loadMembers() {
+      $('#membersGridContainer').html('<div class="text-center py-5 w-100"><div class="spinner-gold mx-auto"></div></div>');
+      
+      const members = await window.WapDB.getAllMembers();
+      allMembers = members;
+      renderGrid(allMembers);
+    }
+
+    async function renderGrid(list) {
+      const container = $('#membersGridContainer');
+      container.empty();
+
+      if (list.length === 0) {
+        container.html(`
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-people text-gold" style="font-size: 40px;"></i>
+            <h5 class="fw-700 text-navy mt-3">No members found</h5>
+            <p class="text-mid mb-0">Try searching for other domains or keywords.</p>
+          </div>
+        `);
+        return;
+      }
+
+      // Fetch active user connections to set correct button states
+      const conns = await window.WapDB.getConnections(currentUser.id);
+
+      list.forEach(member => {
+        // Is connected or is self?
+        const isSelf = member.id === currentUser.id;
+        const isConnected = conns.some(c => c.user_id === member.id || c.connected_user_id === member.id);
+
+        let actionBtnHtml = '';
+        if (isSelf) {
+          actionBtnHtml = `<a href="profile.html?id=${member.id}" class="btn-view-profile bg-secondary text-white">View My Profile</a>`;
+        } else if (isConnected) {
+          actionBtnHtml = `
+            <div class="d-flex gap-2">
+              <a href="profile.html?id=${member.id}" class="btn-view-profile" style="flex:1;">View Profile</a>
+              <button class="btn-connect connected" style="padding:8px 16px;" disabled>Connected</button>
+            </div>
+          `;
+        } else {
+          actionBtnHtml = `
+            <div class="d-flex gap-2">
+              <a href="profile.html?id=${member.id}" class="btn-view-profile" style="flex:1;">View Profile</a>
+              <button class="btn-connect" style="padding:8px 16px;" onclick="connectMember('${member.id}', this)">Connect</button>
+            </div>
+          `;
+        }
+
+        const cardHtml = `
+          <div class="col-md-6 col-lg-3">
+            <div class="member-grid-card">
+              <div>
+                <div class="mgc-avatar">
+                  ${member.avatar_url ? `<img src="${member.avatar_url}" alt="avatar"/>` : member.full_name.charAt(0).toUpperCase()}
+                </div>
+                <div class="mgc-name">${member.full_name}</div>
+                <div class="mgc-biz">${member.designation} · ${member.company}</div>
+              </div>
+              <div class="mt-3">
+                <span class="mgc-domain">${member.domain}</span>
+                <div class="mgc-exp"><i class="bi bi-briefcase-fill text-gold me-1"></i> ${member.experience} Experience</div>
+                ${actionBtnHtml}
+              </div>
+            </div>
+          </div>
+        `;
+        container.append(cardHtml);
+      });
+    }
+
+    function handleLiveSearch() {
+      const query = $('#searchInput').val().toLowerCase().trim();
+      
+      if (!query) {
+        renderGrid(allMembers);
+        return;
+      }
+
+      const filtered = allMembers.filter(m => 
+        m.full_name.toLowerCase().includes(query) ||
+        m.company.toLowerCase().includes(query) ||
+        m.domain.toLowerCase().includes(query) ||
+        m.city.toLowerCase().includes(query) ||
+        m.designation.toLowerCase().includes(query)
+      );
+
+      renderGrid(filtered);
+    }
+
+    async function connectMember(targetId, btn) {
+      showPageLoader();
+      const res = await window.WapDB.connectUsers(currentUser.id, targetId);
+      hidePageLoader();
+
+      if (res.success) {
+        showToast("Connected successfully!", "success");
+        $(btn).addClass('connected').text('Connected').prop('disabled', true);
+        
+        // Re-render grid to update visual buttons correctly
+        setTimeout(async () => {
+          await loadMembers();
+        }, 800);
+      } else {
+        showToast(res.message, "error");
+      }
+    }
+  </script>
+</body>
+</html>

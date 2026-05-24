@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Member Profile – WAP We Are Professionals</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <!-- Core Theme & Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Supabase & jQuery CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- SECURITY ROUTE REDIRECT -->
+  <script>
+    if (!localStorage.getItem('wap_session_user')) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-logo">WAP</div>
+    <div class="spinner-gold"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:16px;">Fetching Bio Details...</p>
+  </div>
+
+  <!-- PROFILE MAIN WORKSPACE -->
+  <div class="profile-banner-large"></div>
+  
+  <div class="container" style="margin-top:-60px; padding-bottom:60px; position:relative; z-index:10;">
+    <div class="row g-4">
+      
+      <!-- ============================
+           LEFT HAND COLUMN: CORE BIO CARD & ACTION
+      ============================ -->
+      <div class="col-lg-8">
+        <!-- Main Core Card -->
+        <div class="profile-main-card">
+          <div class="profile-avatar-large" id="profAvatar">U</div>
+          
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+              <h2 class="profile-full-name mb-1" id="profName">Rahul Mehta</h2>
+              <div class="profile-biz-name" id="profBiz">CEO · TechNova Solutions</div>
+              <span class="profile-domain-badge" id="profDomain">SaaS & Tech</span>
+            </div>
+            <div id="profActionContainer">
+              <!-- Dynamic Connect Actions rendered via JS -->
+            </div>
+          </div>
+
+          <div class="profile-stats-row mt-4 pt-4 border-top">
+            <div class="p-stat">
+              <div class="p-stat-num" id="profConnCount">0</div>
+              <div class="p-stat-lbl">Connections</div>
+            </div>
+            <div class="p-stat" style="border-left: 1.5px solid #F0F4F8; padding-left:32px;">
+              <div class="p-stat-num" id="profPostCount">0</div>
+              <div class="p-stat-lbl">Posts Published</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Member Activity Feed -->
+        <div class="profile-section-card">
+          <h6 id="activityHeading">Recent Activity</h6>
+          <div id="profilePostsContainer">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================
+           RIGHT HAND COLUMN: DETAILS WIDGET
+      ============================ -->
+      <div class="col-lg-4">
+        <div class="profile-section-card">
+          <h6>Professional Info</h6>
+          
+          <div class="info-row">
+            <div class="info-icon"><i class="bi bi-briefcase-fill"></i></div>
+            <div>
+              <span class="info-label d-block">Experience</span>
+              <span class="info-value" id="infoExp">8+ Years</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div>
+              <span class="info-label d-block">Location</span>
+              <span class="info-value" id="infoCity">Mumbai, India</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon"><i class="bi bi-telephone-fill"></i></div>
+            <div>
+              <span class="info-label d-block">Mobile Contact</span>
+              <span class="info-value" id="infoMobile">+91 XXXXXXXXXX</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon"><i class="bi bi-envelope-fill"></i></div>
+            <div>
+              <span class="info-label d-block">Email Address</span>
+              <span class="info-value" id="infoEmail">name@company.com</span>
+            </div>
+          </div>
+
+          <div class="info-row mb-0">
+            <div class="info-icon"><i class="bi bi-globe"></i></div>
+            <div>
+              <span class="info-label d-block">Website Link</span>
+              <a href="#" class="info-value text-gold" id="infoWebsite" target="_blank" style="text-decoration:none;">www.website.com</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DB & Navigation Engine Scripts -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Page Logic -->
+  <script>
+    let targetProfile = null;
+    let currentUser = null;
+
+    $(document).ready(async () => {
+      currentUser = JSON.parse(localStorage.getItem('wap_session_user'));
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id') || currentUser.id;
+
+      await loadProfileData(targetId);
+    });
+
+    async function loadProfileData(userId) {
+      showPageLoader();
+      const profile = await window.WapDB.getProfile(userId);
+      hidePageLoader();
+
+      if (!profile) {
+        showToast("Profile not found.", "error");
+        setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+        return;
+      }
+
+      targetProfile = profile;
+
+      // 1. Populate details
+      $('#profName').text(profile.full_name);
+      $('#profBiz').text(`${profile.designation} · ${profile.company}`);
+      $('#profDomain').text(profile.domain);
+      $('#profAvatar').text(profile.full_name.charAt(0).toUpperCase());
+      
+      if(profile.avatar_url) {
+        $('#profAvatar').html(`<img src="${profile.avatar_url}" alt="avatar" />`);
+      }
+
+      $('#infoExp').text(profile.experience);
+      $('#infoCity').text(`${profile.city}, India`);
+      $('#infoMobile').text(profile.mobile);
+      $('#infoEmail').text(profile.email);
+
+      if (profile.website) {
+        $('#infoWebsite').text(profile.website).attr('href', profile.website.startsWith('http') ? profile.website : `https://${profile.website}`);
+      } else {
+        $('#infoWebsite').text("Not specified").attr('href', '#').addClass('text-muted').removeClass('text-gold');
+      }
+
+      // 2. Load Stats
+      const conns = await window.WapDB.getConnections(userId);
+      $('#profConnCount').text(conns.length);
+
+      // Load post history count
+      const allPosts = await window.WapDB.getAllPosts();
+      const myPosts = allPosts.filter(p => p.user_id === userId);
+      $('#profPostCount').text(myPosts.length);
+
+      // 3. Render Connect Action Buttons
+      const isSelf = profile.id === currentUser.id;
+      const isConnected = conns.some(c => c.user_id === currentUser.id || c.connected_user_id === currentUser.id);
+
+      const actionContainer = $('#profActionContainer');
+      actionContainer.empty();
+
+      if (isSelf) {
+        actionContainer.html('<span class="badge bg-secondary p-2 px-3 fw-600 rounded-5" style="font-size:12px;">This is your Profile</span>');
+        $('#activityHeading').text("My Recent Activity");
+      } else if (isConnected) {
+        actionContainer.html('<button class="btn-register-event bg-success text-white py-2 px-4" disabled><i class="bi bi-patch-check-fill"></i> Connected</button>');
+        $('#activityHeading').text(`${profile.full_name}'s Recent Activity`);
+      } else {
+        actionContainer.html(`
+          <button class="btn-register-event py-2 px-4" onclick="connectWithProfile('${profile.id}')">
+            <i class="bi bi-person-plus-fill"></i> Connect with Member
+          </button>
+        `);
+        $('#activityHeading').text(`${profile.full_name}'s Recent Activity`);
+      }
+
+      // 4. Render Post history cards
+      renderProfilePosts(myPosts);
+    }
+
+    function renderProfilePosts(posts) {
+      const container = $('#profilePostsContainer');
+      container.empty();
+
+      if (posts.length === 0) {
+        container.html(`
+          <div class="text-center py-4 text-muted" style="font-size:13px;">
+            <i class="bi bi-journals" style="font-size: 24px;"></i>
+            <p class="mt-2 mb-0">No posts published by this member yet.</p>
+          </div>
+        `);
+        return;
+      }
+
+      posts.forEach(post => {
+        let badgeClass = 'badge-update';
+        let badgeIcon = 'bi-megaphone';
+        if (post.type === 'product') { badgeClass = 'badge-product'; badgeIcon = 'bi-box-seam'; }
+        if (post.type === 'achievement') { badgeClass = 'badge-achievement'; badgeIcon = 'bi-trophy'; }
+        if (post.type === 'networking') { badgeClass = 'badge-networking'; badgeIcon = 'bi-people'; }
+
+        const cardHtml = `
+          <div class="post-card p-3 mb-3 border" style="box-shadow:none;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="post-type-badge ${badgeClass} m-0"><i class="bi ${badgeIcon}"></i> ${post.type}</span>
+              <small class="text-light" style="font-size:11px;">${new Date(post.created_at).toLocaleDateString()}</small>
+            </div>
+            <div class="post-content mb-0" style="font-size:14px;line-height:1.6;">${post.content}</div>
+          </div>
+        `;
+        container.append(cardHtml);
+      });
+    }
+
+    async function connectWithProfile(targetId) {
+      showPageLoader();
+      const res = await window.WapDB.connectUsers(currentUser.id, targetId);
+      hidePageLoader();
+
+      if (res.success) {
+        showToast("Connected successfully!", "success");
+        // Reload details to show updated action buttons and stats
+        await loadProfileData(targetId);
+      } else {
+        showToast(res.message, "error");
+      }
+    }
+  </script>
+</body>
+</html>

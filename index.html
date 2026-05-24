@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WAP – We Are Professionals | Together We Can</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <!-- Core Theme & Styles -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- Supabase & jQuery CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-logo">WAP</div>
+    <div class="spinner-gold"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:13px;margin-top:16px;">Together We Can</p>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="container" style="padding-top:100px; padding-bottom:80px;">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="hero-badge"><i class="bi bi-lightning-charge-fill text-gold"></i> Since 2019 · 86+ Meetings Hosted</div>
+          <h1 class="hero-title">
+            India's Premier<br>
+            <span class="highlight">Business Network</span>
+            for Professionals
+          </h1>
+          <p class="hero-subtitle">Connect with entrepreneurs, MSMEs, and business owners. One platform. Multiple industries. Shared growth.</p>
+          <div class="hero-cta-group">
+            <a href="auth.html?mode=register" class="cta-primary">
+              <i class="bi bi-people-fill"></i> Get Started Free
+            </a>
+            <a href="auth.html?mode=login" class="cta-secondary">
+              <i class="bi bi-box-arrow-in-right"></i> Sign In
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-label">Members</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">86+</div>
+              <div class="stat-label">Meetings</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">₹2Cr+</div>
+              <div class="stat-label">Business Done</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">12+</div>
+              <div class="stat-label">Industries</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-card-visual position-relative">
+            <div class="hero-mock-card">
+              <div class="mock-profile">
+                <div class="mock-avatar">R</div>
+                <div>
+                  <div class="mock-name">Rahul Mehta</div>
+                  <div class="mock-role">CEO · TechNova Solutions · Mumbai</div>
+                </div>
+              </div>
+              <div class="mock-post">🚀 Excited to announce our new SaaS billing platform launch! Looking for distribution partners across Western India. 12+ years of enterprise tech experience backing this. Let's connect!</div>
+              <div class="mock-tags">
+                <span class="mock-tag">#ProductLaunch</span>
+                <span class="mock-tag">#SaaS</span>
+                <span class="mock-tag">#Networking</span>
+                <span class="mock-tag">#Partnership</span>
+              </div>
+            </div>
+            <div class="floating-chip chip1">
+              <div class="chip-icon" style="background:#FFF3CD;font-size:18px;">🤝</div>
+              <div>
+                <div style="font-size:11px;color:var(--text-light);">New Connection</div>
+                <div style="font-weight:700;font-size:13px;">Priya S. connected</div>
+              </div>
+            </div>
+            <div class="floating-chip chip2">
+              <div class="chip-icon" style="background:#D4EDDA;font-size:18px;">📈</div>
+              <div>
+                <div style="font-size:11px;color:var(--text-light);">This week</div>
+                <div style="font-weight:700;font-size:13px;">+24 referrals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <section id="features" class="features-strip">
+    <div class="container">
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-5">
+          <div class="section-tag">What Sets Us Apart</div>
+          <h2 class="section-title">Built for Business<br>Leaders Who Mean Business</h2>
+        </div>
+        <div class="col-lg-6 offset-lg-1">
+          <p class="section-subtitle">WAP isn't just another networking group. We're a curated community of serious business owners who believe in collaboration over competition.</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-person-check-fill"></i></div>
+            <h5>Curated Profiles</h5>
+            <p>Every member has a verified professional profile showcasing their business, domain, and achievements — no noise, only quality.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-calendar-event-fill"></i></div>
+            <h5>Monthly Meetings</h5>
+            <p>Regular structured networking events — the 86th and counting! Every meeting is designed for real business introductions and referrals.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-diagram-3-fill"></i></div>
+            <h5>Referral Network</h5>
+            <p>Strategic collaborations and referrals between members. Your next big client could already be in the network.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-megaphone-fill"></i></div>
+            <h5>Product Showcase</h5>
+            <p>Post about your products, services, and recent achievements directly to a warm, engaged audience of decision-makers.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-trophy-fill"></i></div>
+            <h5>Achievement Wall</h5>
+            <p>Celebrate milestones — funding rounds, new clients, launches, awards — with people who understand the entrepreneurial journey.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-shield-check-fill"></i></div>
+            <h5>Trust First</h5>
+            <p>Built on long-term relationship building since 2019. A professional network where handshakes still matter.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="how-section">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-5">
+          <div class="section-tag">How It Works</div>
+          <h2 class="section-title">Your Journey to Better Business Connections</h2>
+          <p class="section-subtitle">Getting started is simple. Growing your network is powerful.</p>
+        </div>
+        <div class="col-lg-6 offset-lg-1">
+          <div class="step-item">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h5>Register Your Profile</h5>
+              <p>Create your professional profile with your business details, domain, and experience. It takes under 3 minutes.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h5>Explore the Community</h5>
+              <p>Browse member profiles, read posts, and discover businesses across 12+ industries — all under one platform.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h5>Attend Meetings & Events</h5>
+              <p>RSVP to monthly networking meetings, workshops, and special events listed on your dashboard.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h5>Accelerate Business Referral</h5>
+              <p>Pass referrals, conduct 1-on-1 business syncs, and generate business in a trusted circle since 2019.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING SECTION -->
+  <section id="pricing" class="pricing-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag">WAP Membership Plans</div>
+        <h2 class="section-title">Simple Plans for Shared Growth</h2>
+        <p class="section-subtitle mx-auto" style="max-width: 600px;">Unlock massive networking leverage, WhatsApp listings, and complimentary meetings based on your requirements.</p>
+      </div>
+
+      <div class="row g-4 align-items-stretch">
+        <!-- Plan 1: Essential Plan -->
+        <div class="col-md-6 col-lg-3">
+          <div class="pricing-card">
+            <div class="plan-name">Essential Plan</div>
+            <div class="plan-price">₹501<span>/ lifetime</span></div>
+            <ul class="plan-features">
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Basic WhatsApp Group Access</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Posting on Mon & Thu</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Standard Networking</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Connect with Entrepreneurs</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Share Business Referrals</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Knowledge Base Access</li>
+            </ul>
+            <a href="auth.html?mode=register&plan=essential&price=501" class="btn-price-cta btn-price-cta-navy">Get Started</a>
+          </div>
+        </div>
+
+        <!-- Plan 2: Professional Plan -->
+        <div class="col-md-6 col-lg-3">
+          <div class="pricing-card premium">
+            <div class="plan-name">Professional Plan</div>
+            <div class="plan-price">₹1501<span>/ lifetime</span></div>
+            <ul class="plan-features">
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Essential Plan Benefits</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Postings on Mon & Thu</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> <strong>2 Complimentary Meetings</strong> (Worth ₹1,302)</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Effective joining fees only ₹198!</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Priority Referral Listing</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Featured Directory Badge</li>
+            </ul>
+            <a href="auth.html?mode=register&plan=professional&price=1501" class="btn-price-cta btn-price-cta-gold">Join Professional</a>
+          </div>
+        </div>
+
+        <!-- Plan 3: Premium Semi-Annual -->
+        <div class="col-md-6 col-lg-3">
+          <div class="pricing-card">
+            <div class="plan-name">Premium Semi-Annual</div>
+            <div class="plan-price">₹4001<span>/ 6 months</span></div>
+            <ul class="plan-features">
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Professional Plan Access</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> <strong>4 Monthly Meetings covered</strong></li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Custom Product Showcase</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Full WhatsApp listing perks</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Dedicated 10-Min Presentation Spot</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Core Committee Support</li>
+            </ul>
+            <a href="auth.html?mode=register&plan=premium-semi&price=4001" class="btn-price-cta btn-price-cta-navy">Go Semi-Annual</a>
+          </div>
+        </div>
+
+        <!-- Plan 4: Premium Annual -->
+        <div class="col-md-6 col-lg-3">
+          <div class="pricing-card">
+            <div class="plan-name">Premium Annual</div>
+            <div class="plan-price">₹7201<span>/ 1 year</span></div>
+            <ul class="plan-features">
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Professional Plan Access</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> <strong>9 Monthly Meetings covered</strong></li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Saving of ₹1,400+ on meetings!</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Premium Achievement Wall Listing</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> Dynamic Homepage Banners</li>
+              <li><i class="bi bi-patch-check-fill text-gold"></i> VIP Invitation to Special Awards</li>
+            </ul>
+            <a href="auth.html?mode=register&plan=premium-annual&price=7201" class="btn-price-cta btn-price-cta-navy">Go Annual</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="text-center mb-5 text-white">
+        <div class="section-tag" style="color: var(--gold-light);">Testimonials</div>
+        <h2 class="section-title text-white" style="font-family:'Playfair Display',serif;">Stories of Success</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+            <p class="testimonial-text">"Through WAP, I found my core tech vendors and strategic marketing partners within the first two months. WAP meetings are structured and highly productive!"</p>
+            <div class="testimonial-author">
+              <div class="t-avatar">P</div>
+              <div>
+                <div class="t-name">Prashant Shah</div>
+                <div class="t-biz">Founder · Apex Packaging · Mumbai</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+            <p class="testimonial-text">"As a creative boutique studio, trust is everything. Handshakes in WAP meetings have directly resulted in 25+ business referrals since 2021!"</p>
+            <div class="testimonial-author">
+              <div class="t-avatar">S</div>
+              <div>
+                <div class="t-name">Siddhi Luthra</div>
+                <div class="t-biz">CEO · BrandCanvas Studio · Malad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+            <p class="testimonial-text">"The low joining fee and high-quality membership make WAP a no-brainer. Having direct access to decision-makers across industries is huge for any MSME."</p>
+            <div class="testimonial-author">
+              <div class="t-avatar">K</div>
+              <div>
+                <div class="t-name">Karan Johar</div>
+                <div class="t-biz">Partner · Johar Logistics · Mumbai</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="navbar-brand mb-3">
+            <div class="brand-logo">WAP</div>
+            <div class="brand-text">
+              <span>WAP</span>
+              <span>We Are Professionals</span>
+            </div>
+          </div>
+          <p style="color:rgba(255,255,255,0.5);font-size:13px;line-height:1.6; max-width:300px;">India's premier curated professional ecosystem, driving referral growth and business connections since 2019.</p>
+        </div>
+        <div class="col-md-4 col-lg-3 offset-lg-1">
+          <h6 class="text-gold text-uppercase mb-3" style="font-size:12px;letter-spacing:1px;font-weight:700;">Explore</h6>
+          <div class="footer-links">
+            <a href="#features">What We Do</a>
+            <a href="#how">How It Works</a>
+            <a href="#pricing">Membership Plans</a>
+            <a href="auth.html?mode=register">Join the Community</a>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <h6 class="text-gold text-uppercase mb-3" style="font-size:12px;letter-spacing:1px;font-weight:700;">Contact Us</h6>
+          <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:8px;">
+            <i class="bi bi-geo-alt-fill text-gold me-2"></i> Golden Delicacy, Malad West, Mumbai, India
+          </p>
+          <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:8px;">
+            <i class="bi bi-telephone-fill text-gold me-2"></i> +91 99205 51929 / +91 98204 90339
+          </p>
+          <p style="color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:20px;">
+            <i class="bi bi-envelope-fill text-gold me-2"></i> contact@weareprofessionalswap.in
+          </p>
+          <div class="social-btns">
+            <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr class="footer-divider"/>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center footer-bottom">
+        <div>&copy; 2026 We Are Professionals (WAP). All Rights Reserved.</div>
+        <div class="mt-2 mt-md-0" style="font-size:11px;color:rgba(255,255,255,0.3);">Built with Supabase Backend Integration</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DB & Navigation Engine Scripts -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
